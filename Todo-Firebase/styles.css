@@ -1,0 +1,966 @@
+/* CSS 변수 */
+:root {
+    /* 배경색 */
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #111111;
+    --bg-card: #1a1a1a;
+    --bg-hover: #252525;
+
+    /* 텍스트 */
+    --text-primary: #ffffff;
+    --text-secondary: #c4b5a0;
+    --text-muted: #888888;
+
+    /* 우선순위 색상 */
+    --priority-high: #E50914;
+    --priority-medium: #FFD700;
+    --priority-low: #4CAF50;
+
+    /* 상태 색상 */
+    --success: #4CAF50;
+    --warning: #FF9800;
+    --danger: #E50914;
+
+    /* 액센트 */
+    --accent-color: #c4b5a0;
+    --border-color: rgba(255, 255, 255, 0.1);
+
+    /* 폰트 */
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+    /* 테두리 반경 */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+
+    /* 그림자 */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+
+    /* 트랜지션 */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+}
+
+/* 라이트 테마 */
+[data-theme="light"] {
+    /* 배경색 */
+    --bg-primary: #f5f5f5;
+    --bg-secondary: #ffffff;
+    --bg-card: #ffffff;
+    --bg-hover: #e8e8e8;
+
+    /* 텍스트 */
+    --text-primary: #1a1a1a;
+    --text-secondary: #8b7355;
+    --text-muted: #666666;
+
+    /* 액센트 */
+    --accent-color: #8b7355;
+    --border-color: rgba(0, 0, 0, 0.1);
+
+    /* 그림자 */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+}
+
+/* 리셋 */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+/* 헤더 */
+.header {
+    background-color: var(--bg-secondary);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-family: var(--font-serif);
+    font-size: 1.75rem;
+    font-weight: 700;
+    font-style: italic;
+    color: var(--text-secondary);
+}
+
+.header-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.filter-select {
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: border-color var(--transition-fast);
+}
+
+.filter-select:hover,
+.filter-select:focus {
+    border-color: var(--accent-color);
+    outline: none;
+}
+
+/* 테마 토글 버튼 */
+.theme-toggle {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+}
+
+.theme-toggle:hover {
+    border-color: var(--accent-color);
+    background-color: var(--bg-hover);
+}
+
+.theme-toggle .icon-eye {
+    font-size: 1.1rem;
+    line-height: 1;
+    transition: transform var(--transition-fast);
+}
+
+.theme-toggle:hover .icon-eye {
+    transform: scale(1.1);
+}
+
+/* 라이트 테마일 때 눈 아이콘 변경 */
+[data-theme="light"] .theme-toggle .icon-eye::after {
+    content: '';
+}
+
+.mobile-menu-btn {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.mobile-menu-btn span {
+    width: 24px;
+    height: 2px;
+    background-color: var(--text-primary);
+    transition: var(--transition-normal);
+}
+
+/* 메인 컨테이너 */
+.main-container {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 0;
+    min-height: calc(100vh - 73px);
+}
+
+/* 사이드바 */
+.sidebar {
+    background-color: var(--bg-secondary);
+    padding: 24px;
+    border-right: 1px solid var(--border-color);
+    overflow-y: auto;
+}
+
+.sidebar h3 {
+    font-family: var(--font-serif);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+}
+
+.category-list {
+    list-style: none;
+    margin-bottom: 16px;
+}
+
+.category-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+    margin-bottom: 4px;
+}
+
+.category-item:hover {
+    background-color: var(--bg-hover);
+}
+
+.category-item.active {
+    background-color: var(--bg-card);
+    color: var(--text-secondary);
+}
+
+.category-item .category-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.category-item .category-count {
+    font-size: 0.75rem;
+    background-color: var(--bg-hover);
+    padding: 2px 8px;
+    border-radius: 12px;
+    color: var(--text-muted);
+}
+
+.category-item .delete-category {
+    opacity: 0;
+    background: none;
+    border: none;
+    color: var(--danger);
+    cursor: pointer;
+    padding: 4px;
+    font-size: 1rem;
+    transition: opacity var(--transition-fast);
+}
+
+.category-item:hover .delete-category {
+    opacity: 1;
+}
+
+.add-category-form {
+    display: flex;
+    gap: 8px;
+}
+
+.add-category-form input {
+    flex: 1;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+}
+
+.add-category-form input::placeholder {
+    color: var(--text-muted);
+}
+
+.add-category-form button {
+    background-color: var(--accent-color);
+    color: var(--bg-primary);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: opacity var(--transition-fast);
+}
+
+.add-category-form button:hover {
+    opacity: 0.8;
+}
+
+/* 통계 섹션 */
+.stats-section {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-color);
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 12px;
+    background-color: var(--bg-card);
+    border-radius: var(--radius-sm);
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Todo 섹션 */
+.todo-section {
+    padding: 24px;
+    max-width: 800px;
+}
+
+/* 할일 추가 폼 */
+.add-todo-form {
+    background-color: var(--bg-card);
+    padding: 20px;
+    border-radius: var(--radius-md);
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-sm);
+}
+
+.form-row {
+    display: flex;
+    gap: 12px;
+}
+
+.form-row:first-child {
+    margin-bottom: 12px;
+}
+
+.form-options {
+    flex-wrap: wrap;
+}
+
+#todo-title {
+    flex: 1;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    transition: border-color var(--transition-fast);
+}
+
+#todo-title::placeholder {
+    color: var(--text-muted);
+}
+
+#todo-title:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+.add-btn {
+    background-color: var(--accent-color);
+    color: var(--bg-primary);
+    border: none;
+    padding: 12px 24px;
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity var(--transition-fast);
+}
+
+.add-btn:hover {
+    opacity: 0.9;
+}
+
+.form-options select,
+.form-options input[type="date"] {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+.form-options select:focus,
+.form-options input[type="date"]:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+/* Todo 리스트 */
+.todo-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Todo 아이템 */
+.todo-item {
+    background-color: var(--bg-card);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.todo-item:hover {
+    transform: translateX(4px);
+    box-shadow: var(--shadow-md);
+}
+
+.todo-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+}
+
+.todo-item[data-priority="high"]::before {
+    background-color: var(--priority-high);
+}
+
+.todo-item[data-priority="medium"]::before {
+    background-color: var(--priority-medium);
+}
+
+.todo-item[data-priority="low"]::before {
+    background-color: var(--priority-low);
+}
+
+.todo-item.completed {
+    opacity: 0.6;
+}
+
+.todo-item.completed .todo-title {
+    text-decoration: line-through;
+    color: var(--text-muted);
+}
+
+/* 체크박스 */
+.todo-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.todo-checkbox:hover {
+    border-color: var(--accent-color);
+}
+
+.todo-checkbox:checked {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.todo-checkbox:checked::after {
+    content: '\2713';
+    color: var(--bg-primary);
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Todo 콘텐츠 */
+.todo-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.todo-title {
+    font-size: 1rem;
+    margin-bottom: 4px;
+    word-wrap: break-word;
+}
+
+.todo-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.todo-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.todo-meta .priority-badge {
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.todo-meta .priority-badge.high {
+    background-color: rgba(229, 9, 20, 0.2);
+    color: var(--priority-high);
+}
+
+.todo-meta .priority-badge.medium {
+    background-color: rgba(255, 215, 0, 0.2);
+    color: var(--priority-medium);
+}
+
+.todo-meta .priority-badge.low {
+    background-color: rgba(76, 175, 80, 0.2);
+    color: var(--priority-low);
+}
+
+.todo-meta .due-date.overdue {
+    color: var(--danger);
+}
+
+.todo-meta .due-date.soon {
+    color: var(--warning);
+}
+
+/* Todo 액션 버튼 */
+.todo-actions {
+    display: flex;
+    gap: 8px;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.todo-item:hover .todo-actions {
+    opacity: 1;
+}
+
+.todo-actions button {
+    background-color: var(--bg-hover);
+    border: none;
+    color: var(--text-muted);
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.todo-actions button:hover {
+    color: var(--text-primary);
+}
+
+.todo-actions .edit-btn:hover {
+    background-color: var(--accent-color);
+    color: var(--bg-primary);
+}
+
+.todo-actions .delete-btn:hover {
+    background-color: var(--danger);
+    color: var(--text-primary);
+}
+
+/* 빈 상태 */
+.empty-state {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.empty-state.show {
+    display: flex;
+}
+
+.empty-icon {
+    margin-bottom: 20px;
+    color: var(--text-muted);
+    opacity: 0.5;
+}
+
+.empty-state p {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.empty-state span {
+    font-size: 0.875rem;
+}
+
+/* 모달 */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-overlay.show {
+    display: flex;
+}
+
+.modal {
+    background-color: var(--bg-card);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 480px;
+    box-shadow: var(--shadow-lg);
+    animation: modalIn 0.3s ease;
+}
+
+@keyframes modalIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h2 {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+    transition: color var(--transition-fast);
+}
+
+.modal-close:hover {
+    color: var(--text-primary);
+}
+
+.modal form {
+    padding: 24px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    transition: border-color var(--transition-fast);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.btn-cancel,
+.btn-save,
+.btn-delete {
+    padding: 10px 24px;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity var(--transition-fast);
+}
+
+.btn-cancel {
+    background-color: var(--bg-hover);
+    border: none;
+    color: var(--text-muted);
+}
+
+.btn-cancel:hover {
+    color: var(--text-primary);
+}
+
+.btn-save {
+    background-color: var(--accent-color);
+    border: none;
+    color: var(--bg-primary);
+}
+
+.btn-save:hover {
+    opacity: 0.9;
+}
+
+.btn-delete {
+    background-color: var(--danger);
+    border: none;
+    color: var(--text-primary);
+}
+
+.btn-delete:hover {
+    opacity: 0.9;
+}
+
+.delete-modal {
+    max-width: 400px;
+}
+
+.delete-message {
+    padding: 24px;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.delete-modal .modal-actions {
+    padding: 0 24px 24px;
+}
+
+/* 반응형 - 태블릿 */
+@media (max-width: 1024px) {
+    .main-container {
+        grid-template-columns: 220px 1fr;
+    }
+
+    .header-actions {
+        gap: 8px;
+    }
+
+    .filter-select {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+}
+
+/* 반응형 - 모바일 */
+@media (max-width: 768px) {
+    .header {
+        padding: 12px 16px;
+    }
+
+    .header-actions {
+        display: none;
+    }
+
+    .mobile-menu-btn {
+        display: flex;
+    }
+
+    .main-container {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        position: fixed;
+        left: -280px;
+        top: 73px;
+        bottom: 0;
+        width: 280px;
+        z-index: 99;
+        transition: left var(--transition-normal);
+    }
+
+    .sidebar.show {
+        left: 0;
+    }
+
+    .todo-section {
+        padding: 16px;
+    }
+
+    .add-todo-form {
+        padding: 16px;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    .form-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .form-options select:last-child {
+        grid-column: span 2;
+    }
+
+    .add-btn {
+        width: 100%;
+    }
+
+    .todo-item {
+        padding: 12px 16px;
+    }
+
+    .todo-actions {
+        opacity: 1;
+    }
+
+    .stats {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+
+    .stat-item {
+        padding: 8px;
+    }
+
+    .stat-value {
+        font-size: 1.25rem;
+    }
+}
+
+/* 다크 스크롤바 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--bg-hover);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* 로딩 상태 */
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+.loading::before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-top-color: var(--accent-color);
+    border-radius: 50%;
+    margin-right: 12px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* 드래그 앤 드롭 스타일 */
+.todo-item[draggable="true"] {
+    cursor: grab;
+}
+
+.todo-item[draggable="true"]:active {
+    cursor: grabbing;
+}
+
+.todo-item.dragging {
+    opacity: 0.5;
+    transform: scale(0.98);
+    box-shadow: var(--shadow-lg);
+}
+
+.category-item.drag-over {
+    background-color: var(--accent-color);
+    color: var(--bg-primary);
+    transform: scale(1.02);
+    box-shadow: 0 0 0 2px var(--accent-color);
+}
+
+.category-item.drag-over .category-name,
+.category-item.drag-over .category-count {
+    color: var(--bg-primary);
+}

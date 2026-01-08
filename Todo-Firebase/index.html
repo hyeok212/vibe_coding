@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <h1 class="logo">Todo</h1>
+        <div class="header-actions">
+            <select id="filter-priority" class="filter-select">
+                <option value="all">모든 우선순위</option>
+                <option value="high">높음</option>
+                <option value="medium">중간</option>
+                <option value="low">낮음</option>
+            </select>
+            <select id="filter-status" class="filter-select">
+                <option value="all">모든 상태</option>
+                <option value="active">미완료</option>
+                <option value="completed">완료</option>
+            </select>
+            <select id="sort-by" class="filter-select">
+                <option value="createdAt">생성일순</option>
+                <option value="dueDate">마감일순</option>
+                <option value="priority">우선순위순</option>
+            </select>
+            <button class="theme-toggle" id="theme-toggle" title="테마 변경">
+                <span class="icon-eye">👁</span>
+            </button>
+        </div>
+        <button class="mobile-menu-btn" id="mobile-menu-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <!-- 메인 컨테이너 -->
+    <main class="main-container">
+        <!-- 사이드바 -->
+        <aside class="sidebar" id="sidebar">
+            <div class="categories-section">
+                <h3>카테고리</h3>
+                <ul class="category-list" id="category-list">
+                    <!-- 카테고리 동적 생성 -->
+                </ul>
+                <div class="add-category-form">
+                    <input type="text" id="new-category-input" placeholder="새 카테고리">
+                    <button type="button" id="add-category-btn">+</button>
+                </div>
+            </div>
+            <div class="stats-section">
+                <h3>통계</h3>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-value" id="total-count">0</span>
+                        <span class="stat-label">전체</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="completed-count">0</span>
+                        <span class="stat-label">완료</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="pending-count">0</span>
+                        <span class="stat-label">미완료</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Todo 섹션 -->
+        <section class="todo-section">
+            <!-- 할일 추가 폼 -->
+            <form class="add-todo-form" id="add-todo-form">
+                <div class="form-row">
+                    <input type="text" id="todo-title" placeholder="새 할일을 입력하세요..." required>
+                    <button type="submit" class="add-btn">추가</button>
+                </div>
+                <div class="form-row form-options">
+                    <select id="todo-priority">
+                        <option value="medium">중간</option>
+                        <option value="high">높음</option>
+                        <option value="low">낮음</option>
+                    </select>
+                    <input type="date" id="todo-due-date">
+                    <select id="todo-category">
+                        <!-- 카테고리 동적 생성 -->
+                    </select>
+                </div>
+            </form>
+
+            <!-- Todo 리스트 -->
+            <div class="todo-list" id="todo-list">
+                <!-- Todo 아이템 동적 생성 -->
+            </div>
+
+            <!-- 빈 상태 -->
+            <div class="empty-state" id="empty-state">
+                <div class="empty-icon">
+                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                    </svg>
+                </div>
+                <p>할일이 없습니다</p>
+                <span>위의 입력창에서 새 할일을 추가해보세요</span>
+            </div>
+        </section>
+    </main>
+
+    <!-- 수정 모달 -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal" id="edit-modal">
+            <div class="modal-header">
+                <h2>할일 수정</h2>
+                <button type="button" class="modal-close" id="modal-close">&times;</button>
+            </div>
+            <form id="edit-form">
+                <input type="hidden" id="edit-id">
+                <div class="form-group">
+                    <label for="edit-title">제목</label>
+                    <input type="text" id="edit-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-priority">우선순위</label>
+                    <select id="edit-priority">
+                        <option value="high">높음</option>
+                        <option value="medium">중간</option>
+                        <option value="low">낮음</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-due-date">마감일</label>
+                    <input type="date" id="edit-due-date">
+                </div>
+                <div class="form-group">
+                    <label for="edit-category">카테고리</label>
+                    <select id="edit-category">
+                        <!-- 카테고리 동적 생성 -->
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" id="btn-cancel">취소</button>
+                    <button type="submit" class="btn-save">저장</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 삭제 확인 모달 -->
+    <div class="modal-overlay" id="delete-modal-overlay">
+        <div class="modal delete-modal">
+            <div class="modal-header">
+                <h2>삭제 확인</h2>
+            </div>
+            <p class="delete-message">이 할일을 삭제하시겠습니까?</p>
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" id="delete-cancel">취소</button>
+                <button type="button" class="btn-delete" id="delete-confirm">삭제</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
